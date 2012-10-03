@@ -8,7 +8,7 @@ footer: true
 
 I work for <a href="http://sprucemedia.com">Spruce Media</a> primarily doing web development using .Net tools.
 
-At my <a href="http://www.vertmarkets.com">previous job</a> I used NHibernate and ASP.Net MVC to rewrite portions several public websites.  For a while I was very interested in Lucene.Net and did quite a bit of work with that.  I was also involved in supporting a couple of Linux systems and have written custom code for an Asterisk PBX system.
+At my <a href="http://www.vertmarkets.com">previous job</a> I used NHibernate and ASP.Net MVC to rewrite portions of several public websites.  For a while I was very interested in Lucene.Net and did quite a bit of work with that.  I was also involved in supporting a couple of Linux systems and have written custom code for an Asterisk PBX system.
 
 I used to work for a <a href="http://www.prometrics.com">consulting company</a> that provides expertise in the area of pharmaceutical sales force metrics. These are things like attainment to goals, sales reporting, and data analysis. My official title was “Senior Database Developer”, but I worked on a bunch of different things. I was most involved in ASP.Net programming, Compact Framework programming, and BizTalk 2004 integration.
 
