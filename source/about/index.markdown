@@ -21,14 +21,14 @@ I have a B.S. in Chemical Engineering from Penn State.
 ## Projects
 <ul class="about-list">
   <li>
-  	<a href="http://itunes.apple.com/us/app/romote/id488604877?ls=1&mt=8">Romote</a>: A <a href="http://www.roku.com">Roku 2</a> streaming player remote control for
-  	the iPhone and iPad. I wrote this primarily for my own use but it has a few noteworthy features including correct handling of dictation in text entry areas
-  	and a separate iPad layout.
+  	<a href="http://itunes.apple.com/us/app/romote/id488604877?ls=1&mt=8&partnerId=30&siteID=GedyEx6hBKQ">Romote</a>: A <a href="http://www.roku.com">Roku 2</a>
+    streaming player remote control for the iPhone and iPad. I wrote this primarily for my own use but it has a few noteworthy features including correct
+    handling of dictation in text entry areas and a separate iPad layout.
   </li>
   <li>
-  	<a href="http://itunes.apple.com/us/app/easy-pitch-counter/id463372172?ls=1&mt=8">Easy Pitch Counter</a>: A pitch counting app for Little League baseball for
-  	the iPhone. This is focused on counting the number of pitches a pitcher throws and keeping track of the current count against a batter. There's also
-  	a <a href="http://www.easypitchcounter.com">web backend</a> to let you share the info with parents and other coaches.
+  	<a href="http://itunes.apple.com/us/app/easy-pitch-counter/id463372172?ls=1&mt=8&partnerId=30&siteID=GedyEx6hBKQ">Easy Pitch Counter</a>: A pitch counting
+    app for Little League baseball for the iPhone. This is focused on counting the number of pitches a pitcher throws and keeping track of the current count
+    against a batter. There's also a <a href="http://www.easypitchcounter.com">web backend</a> to let you share the info with parents and other coaches.
   </li>
 </ul>
 
