@@ -37,3 +37,6 @@ I have a B.S. in Chemical Engineering from Penn State.
   <li><strong>Email:</strong> <a href="mailto:sean@seancarpenter.net">sean@seancarpenter.net</a></li>
   <li><strong>Twitter:</strong> <a href="http://www.twitter.com/scarpenter">@scarpenter</a></li>
 </ul>
+<p>
+  <a style="display:none;" rel="me" href="https://plus.google.com/109155364692488400884?rel=author">Google+</a>
+</p>
