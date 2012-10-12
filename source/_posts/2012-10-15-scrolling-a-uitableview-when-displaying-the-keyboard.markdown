@@ -10,8 +10,8 @@ published: false
 I have a few apps that allow you to edit text in a table cell of a <a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/UITableView_Class/Reference/Reference.html">UITableView</a>. One thing that can happen when doing that (especially on the iPhone) is that when the keyboard is shown it can actually cover the text field being edited.
 <!-- more -->
 
-{% img /images/initial_view.png 'Initial screen' 'Initial screen' %}
-{% img /images/cell_covered.png 'Edited cell covered by keyboard' 'Edited cell covered by keyboard' %}
+{% img http://pictures.seancarpenter.net/blog/initial_view.png 'Initial screen' 'Initial screen' %}
+{% img http://pictures.seancarpenter.net/blog/cell_covered.png 'Edited cell covered by keyboard' 'Edited cell covered by keyboard' %}
 
 Since that's obviously not good you need to scroll the edited cell into view when the keyboard is shown. My first attempt was to use the `scrollToRowAtIndexPath:atScrollPosition:animated:` method on `UITableView`. Unfortunately this is only part of the solution. While the table view will scroll the supplied row into view, it doesn't take into account the keyboard. In other words the table view scrolls the row into view according to the table view's frame, ignoring the fact that the keyboard is covering part of this frame. So the row may still not be visible.
 
