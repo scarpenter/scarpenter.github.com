@@ -18,3 +18,13 @@
         margin-bottom:10px;
     }
 }
+
+.plain-image {
+    img {
+        @include border-radius(0);
+        @include box-shadow(none);
+        border:none;
+    }
+    text-decoration:none;
+    display:block;
+}

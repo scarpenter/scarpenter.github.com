@@ -21,6 +21,9 @@ I have a B.S. in Chemical Engineering from Penn State.
 ## Projects
 <ul class="about-list">
   <li>
+    <a href="http://itunes.apple.com/us/app/easy-score-keeper/id570999111?ls=1&mt=8&partnerId=30&siteID=GedyEx6hBKQ">Easy Score Keeper</a>: A score keeping app for board games, card games, or any game with rounds and a score. With a focus on simplicity it's easy to enter scores and get back to playing your game.
+  </li>
+  <li>
   	<a href="http://itunes.apple.com/us/app/romote/id488604877?ls=1&mt=8&partnerId=30&siteID=GedyEx6hBKQ">Romote</a>: A <a href="http://www.roku.com">Roku 2</a>
     streaming player remote control for the iPhone and iPad. I wrote this primarily for my own use but it has a few noteworthy features including correct
     handling of dictation in text entry areas and a separate iPad layout.
