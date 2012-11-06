@@ -3,7 +3,6 @@ layout: post
 title: "Page Specific Javascript With the Rails Asset Pipeline"
 date: 2012-11-05 16:37
 comments: false
-published: false
 categories: 
 ---
 Rails' asset pipeline is a great way to manage your javascript and CSS in a Rails app.  By default it handles pre-processing your files (converting CoffeeScript to javascript and SASS to CSS), concatentating your files into a single file, and generating filenames including hashes of the content.  This reduces the number of HTTP requests necessary to download your files and makes it easy to use HTTP caching on your assets.
