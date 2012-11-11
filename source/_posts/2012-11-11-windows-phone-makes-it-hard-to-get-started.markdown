@@ -1,9 +1,8 @@
 ---
 layout: post
 title: "Windows Phone 8 Makes It Hard To Get Started"
-date: 2012-11-11 17:25
+date: 2012-11-11 10:25
 comments: false
-published: false
 categories: 
 ---
 I decided to give Windows Phone 8 development a shot, enticed by their "$8 for 8 days" deal on developer program membership (it's normally $99/year).  My idea is to try writing [Easy Score Keeper](http://itunes.apple.com/us/app/easy-score-keeper/id570999111?ls=1&mt=8&partnerId=30&siteID=GedyEx6hBKQ) for Windows Phone 8 since I just released it on iOS.  Since I've been a Microsoft developer for 12 years and a .Net developer for about 9 I'm not worried about coding in C#.
