@@ -7,6 +7,8 @@ categories:
 ---
 When using custom attributes in .Net, one of the most common tasks is to query a member for any custom attributes that are applied.  The [MemberInfo](http://msdn.microsoft.com/en-us/library/8fek28hz.aspx) class has a [GetCustomAttributes](http://msdn.microsoft.com/en-us/library/dwc6ew1d.aspx) method for just this purpose.
 
+<!-- more -->
+
 {% codeblock lang:csharp %}
 public class ExampleAttribute : Attribute
 {
