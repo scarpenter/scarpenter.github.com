@@ -42,3 +42,19 @@ blockquote {
     text-decoration:none;
     display:block;
 }
+
+/* Temporary(?) Gist styling fix */
+
+.gist .gist-file {
+    font-size:13px;
+    .gist-data .data .lines {
+        pre {
+            font-size:inherit;
+            color:inherit;
+            @include box-shadow(none);
+        }
+    }
+    .line_numbers {
+        line-height:19px;
+    }
+}
