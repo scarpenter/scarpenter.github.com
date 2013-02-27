@@ -10,13 +10,16 @@ I work for <a href="http://sprucemedia.com">Spruce Media</a> primarily doing web
 
 At my <a href="http://www.vertmarkets.com">previous job</a> I used NHibernate and ASP.Net MVC to rewrite portions of several public websites.  For a while I was very interested in Lucene.Net and did quite a bit of work with that.  I was also involved in supporting a couple of Linux systems and have written custom code for an Asterisk PBX system.
 
-I used to work for a <a href="http://www.prometrics.com">consulting company</a> that provides expertise in the area of pharmaceutical sales force metrics. These are things like attainment to goals, sales reporting, and data analysis. My official title was “Senior Database Developer”, but I worked on a bunch of different things. I was most involved in ASP.Net programming, Compact Framework programming, and BizTalk 2004 integration.
+I used to work for a <a href="http://www.prometrics.com">consulting company</a> that provides expertise in the area of pharmaceutical sales force metrics. These are things like attainment to goals, sales reporting, and data analysis. My official title was "Senior Database Developer", but I worked on a bunch of different things. I was most involved in ASP.Net programming, Compact Framework programming, and BizTalk 2004 integration.
 
 Prior to that, I worked at <a href="http://www.t-mobile.com">T-Mobile</a> USA where I did database administration and application development. That was a pretty cool job where I got exposure to a bunch of different technologies. I also got to live through several corporate name changes: I joined right after Omnipoint became Voicestream, which was then purchased by Deutsche Telekom and renamed T-Mobile.
 
 Before that, I worked at Ortho Biotech Inc. as a process engineer. My specialties were automated control systems (primarily <a href="http://ab.rockwellautomation.com/Programmable-Controllers/PLC-5">Allen-Bradley PLCs</a> and Wonderware InTouch SCADA systems) and high-purity water systems.
 
 I have a B.S. in Chemical Engineering from Penn State.
+
+## Hiring Me
+I'm available for consulting/contracting on web and mobile apps via the company I run with my wife: [Clever Armadillo LLC](http://www.cleverarmadillo.com).  You can contact me at <a href="mailto:sean@cleverarmadillo.com">sean@cleverarmadillo.com</a> or (267) 482-0491 for those requests.
 
 ## Projects
 <ul class="about-list">
@@ -42,6 +45,8 @@ I have a B.S. in Chemical Engineering from Penn State.
 <ul class="about-list">
   <li><strong>Email:</strong> <a href="mailto:sean@seancarpenter.net">sean@seancarpenter.net</a></li>
   <li><strong>Twitter:</strong> <a href="http://www.twitter.com/scarpenter">@scarpenter</a></li>
+  <li><strong>App.net:</strong> <a href="https://alpha.app.net/scarpenter">@scarpenter</a></li>
+  <li><strong>Business:</strong> <a href="http://www.cleverarmadillo.com">Clever Armadillo LLC</a></li>
 </ul>
 <p>
   <a style="display:none;" rel="me" href="https://plus.google.com/109155364692488400884?rel=author">Google+</a>
