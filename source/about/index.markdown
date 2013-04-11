@@ -32,6 +32,9 @@ I'm available for consulting/contracting on web and mobile apps via the company 
     handling of dictation in text entry areas and a separate iPad layout.
   </li>
   <li>
+    <a href="http://itunes.apple.com/us/app/baseball-field-layout/id604707759?ls=1&amp;mt=8&amp;partnerId=30&amp;siteID=GedyEx6hBKQ">Baseball Field Layout</a>: An app that helps you lay out a baseball field for practice or a casual game.  You can choose between three standard field sizes (60&prime;, 70&prime;, 90&prime;) and get a field laid out with all 3 bases, home plate, and the pitcher's mound.
+  </li>
+  <li>
   	<a href="http://itunes.apple.com/us/app/easy-pitch-counter/id463372172?ls=1&amp;mt=8&amp;partnerId=30&amp;siteID=GedyEx6hBKQ">Easy Pitch Counter</a>: A pitch counting
     app for Little League baseball for the iPhone. This is focused on counting the number of pitches a pitcher throws and keeping track of the current count
     against a batter. There's also a <a href="http://www.easypitchcounter.com">web backend</a> to let you share the info with parents and other coaches.
