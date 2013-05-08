@@ -18,4 +18,4 @@ The purpose of Armadillo Group Text is to allow organizers of small groups to se
 
 This is my first time using [Twilio](http://twilio.com) and it's been a joy so far.  The API is simple to use (especially with the help of the [twilio-ruby](https://github.com/twilio/twilio-ruby) gem) and has been solid.  The ease of use has me wondering what kind of project I could do to utilize their voice services.
 
-If you have need to send a message to a group, give [Armadillo Group Text](http://www.sendagrouptext.com) a try.
+If you need to send a message to a group, give [Armadillo Group Text](http://www.sendagrouptext.com) a try.
