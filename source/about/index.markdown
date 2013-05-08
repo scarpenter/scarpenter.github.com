@@ -40,6 +40,9 @@ I'm available for consulting/contracting on web and mobile apps via the company 
     against a batter. There's also a <a href="http://www.easypitchcounter.com">web backend</a> to let you share the info with parents and other coaches.
   </li>
   <li>
+    <a href="http://www.sendagrouptext.com">Armadillo Group Text</a>: Armadillo Group Text is a service that allows group organizers to send text messages to the members of their groups.  Groups can be created and maintained on the site and sending a message to a group is as simple as a few clicks.
+  </li>
+  <li>
     <a href="http://markitfor.me">markitfor.me</a>: markitfor.me is a full-text bookmark indexing service. Instead of just tracking the link and title for bookmarks, markitfor.me downloads the content of pages you bookmark and indexes them. So finding something you bookmarked isn't a matter of remembering titles or tags - just search for the content you're looking for!
   </li>
 </ul>
