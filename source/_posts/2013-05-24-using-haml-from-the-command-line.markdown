@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Using Haml from the Command Line"
-date: 2013-05-23 19:51
+date: 2013-05-24 17:31
 comments: false
 categories:
 ---
