@@ -7,6 +7,8 @@ categories:
 ---
 I recently enabled SSL for a Rails 3 site that I'm working on.  I thought it would be simple since the entire site will be served over SSL (no switching between SSL and non-SSL requests based on the page).
 
+<!-- more -->
+
 Since the entire site will be served over SSL, I configured nginx to do the SSL redirects for me:
 {% codeblock nginx.conf lang:nginx %}
 server {
