@@ -38,6 +38,15 @@ Here's the [Github repository](https://github.com/scarpenter/cposc) for the smal
 ### Capistrano
 Capistrano recently released a new version (3.0) that makes some changes to how Capistrano is configured and runs.  I've only used the 2.x version and that's what I covered in my presentation.  The [Capistrano website](http://www.capistranorb.com) has information on the new version; I've used the [Github wiki](https://github.com/capistrano/capistrano/wiki/2.x-Getting-Started) when setting up version 2.x.
 
+### Hosts
+These are the Linux hosts I mentioned during my presentation; there are certainly a lot more.
+<ul class="indented-list">
+	<li><a href="http://aws.amazon.com">Amazon AWS</a></li>
+	<li><a href="http://www.windowsazure.com">Windows Azure</a></li>
+	<li><a href="https://www.digitalocean.com/?refcode=a4c745925e6a">Digital Ocean</a></li>
+	<li><a href="https://www.linode.com/?r=fdd2b3b2ca8d34a683ac7b27827b59f8150464b5">Linode</a></li>
+</ul>
+
 ### Summary
 Thanks to all of the other speakers and the conference organizers for an enjoyable day.  I also had a fun lunch discussion with Scott, Stefan, Samrat, Hector, Jeff, and Nathan (sorry if I missed anyone!).
 
