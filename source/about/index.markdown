@@ -27,9 +27,9 @@ I'm available for consulting/contracting on web and mobile apps via the company 
     <a href="http://itunes.apple.com/us/app/easy-score-keeper/id570999111?ls=1&amp;mt=8&amp;at=10l5G3&amp;ct=blog">Easy Score Keeper</a>: A score keeping app for board games, card games, or any game with rounds and a score. With a focus on simplicity it's easy to enter scores and get back to playing your game.
   </li>
   <li>
-  	<a href="http://itunes.apple.com/us/app/romote/id488604877?ls=1&amp;mt=8&amp;at=10l5G3&amp;ct=blog">Romote</a>: A <a href="http://www.roku.com">Roku 2</a>
+  	<a href="http://itunes.apple.com/us/app/romote/id488604877?ls=1&amp;mt=8&amp;at=10l5G3&amp;ct=blog">Romote</a>: A <a href="http://www.roku.com">Roku</a>
     streaming player remote control for the iPhone and iPad. I wrote this primarily for my own use but it has a few noteworthy features including correct
-    handling of dictation in text entry areas and a separate iPad layout.
+    handling of dictation in text entry areas and a separate iPad layout. Romote also includes a Roku sleep timer.
   </li>
   <li>
     <a href="http://itunes.apple.com/us/app/baseball-field-layout/id604707759?ls=1&amp;mt=8&amp;at=10l5G3&amp;ct=blog">Baseball Field Layout</a>: An app that helps you lay out a baseball field for practice or a casual game.  You can choose between three standard field sizes (60&prime;, 70&prime;, 90&prime;) and get a field laid out with all 3 bases, home plate, and the pitcher's mound.
