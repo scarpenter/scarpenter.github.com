@@ -6,7 +6,9 @@ sharing: true
 footer: true
 ---
 
-I work for [Spruce Media](http://sprucemedia.com) primarily doing web development using .Net tools.
+I work for [Venga](http://www.getvenga.com) doing web development in Ruby and back-end development in .Net.
+
+Previously, I worked for [Spruce Media](http://sprucemedia.com) primarily doing web development. Much of the work was in .Net but I also did development in Ruby, Rails, and the associated tools.
 
 At my [previous job](http://www.vertmarkets.com) I used NHibernate and ASP.Net MVC to rewrite portions of several public websites.  For a while I was very interested in Lucene.Net and did quite a bit of work with that.  I was also involved in supporting a couple of Linux systems and have written custom code for an Asterisk PBX system.
 
@@ -23,6 +25,9 @@ I'm available for consulting/contracting on web and mobile apps via the company 
 
 ## Projects
 <ul class="about-list">
+  <li>
+    <a href="https://www.poplarapp.com">Poplar</a>: Poplar is a contact management solution aimed at small businesses trying to keep a handle on their contacts and sales prospects. It helps you spend more time making sales and less time keeping track of them.
+  </li>
   <li>
     <a href="http://itunes.apple.com/us/app/easy-score-keeper/id570999111?ls=1&amp;mt=8&amp;at=10l5G3&amp;ct=blog">Easy Score Keeper</a>: A score keeping app for board games, card games, or any game with rounds and a score. With a focus on simplicity it's easy to enter scores and get back to playing your game.
   </li>
