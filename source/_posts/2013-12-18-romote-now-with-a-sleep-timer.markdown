@@ -5,6 +5,11 @@ date: 2013-12-18 13:04
 comments: false
 categories:
 ---
+**UPDATE 12/21/2015**
+[I've released](http://blog.seancarpenter.net/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/) a new stand-alone Roku sleep timer named [Ro To Sleep](https://itunes.apple.com/us/app/ro-to-sleep-roku-streaming/id1067642181?ls=1&mt=8&at=10l5G3&ct=blog). You can read the [announcement](http://blog.seancarpenter.net/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/) for all of the details, but the short version is that Ro To Sleep is focused on just sleep timer functionality.
+
+**END UPDATE**
+
 I've been using two [Roku](http://www.roku.com) streaming players for just over two years now. Channels are added regularly and the addition of [WatchESPN](http://www.roku.com/channels/#!details/34376/watchespn) recently added some sports - something that's noticeably missing from many streaming solutions.
 
 <!-- more -->
