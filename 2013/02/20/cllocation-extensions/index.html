@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CLLocation Extensions - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="I&#8217;ve been working on a new iOS project that uses CoreLocation to determine some points. While CLLocation has a method for determining the &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2013/02/20/cllocation-extensions/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CLLocation Extensions</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-20T16:51:00-05:00" pubdate data-updated="true">Feb 20<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ve been working on a new iOS project that uses <a href="http://developer.apple.com/library/ios/#documentation/CoreLocation/Reference/CoreLocation_Framework/_index.html">CoreLocation</a> to determine some points.  While <a href="http://developer.apple.com/library/ios/#documentation/CoreLocation/Reference/CLLocation_Class/CLLocation/CLLocation.html#//apple_ref/doc/uid/TP40007126">CLLocation</a> has a method for determining the distance between two locations (<code>distanceFromLocation:</code>) it doesn&#8217;t have one for doing the opposite: calculating a second location based on a distance (and bearing) from the first.</p>
+
+<!-- More -->
+
+
+<p>So I added a category on CLLocation that performs this calculation:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;CoreLocation/CoreLocation.h&gt;</span>
+</span><span class='line'><span class="cp">#import &quot;CLLocation+LocationExtensions.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CLLocation</span><span class="o">*</span> <span class="n">startPoint</span> <span class="o">=</span> <span class="p">[[</span><span class="n">CLLocation</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithLatitude:</span><span class="mf">39.90657</span> <span class="nl">longitude:</span><span class="o">-</span><span class="mf">75.16656</span><span class="p">];</span>
+</span><span class='line'><span class="n">CLLocation</span><span class="o">*</span> <span class="n">newPoint</span> <span class="o">=</span> <span class="p">[</span><span class="n">startPoint</span> <span class="nl">locationAtDistance:</span><span class="mi">300</span> <span class="nl">andBearing:</span><span class="mi">180</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;New point: %@&quot;</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">);</span> <span class="c1">// new point is at 39.90387204, -75.16656</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The other need I had was to calculate the bearing between two points:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="cp">#import &lt;CoreLocation/CoreLocation.h&gt;</span>
+</span><span class='line'><span class="cp">#import &quot;CLLocation+LocationExtensions.h&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">CLLocation</span><span class="o">*</span> <span class="n">startPoint</span> <span class="o">=</span> <span class="p">[[</span><span class="n">CLLocation</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithLatitude:</span><span class="mf">39.90657</span> <span class="nl">longitude:</span><span class="o">-</span><span class="mf">75.16656</span><span class="p">];</span>
+</span><span class='line'><span class="n">CLLocation</span><span class="o">*</span> <span class="n">endPoint</span> <span class="o">=</span> <span class="p">[[</span><span class="n">CLLocation</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithLatitude:</span><span class="mf">39.90387204</span> <span class="nl">longitude:</span><span class="o">-</span><span class="mf">75.16656</span><span class="p">];</span>
+</span><span class='line'><span class="n">CLLocationDegrees</span> <span class="n">bearing</span> <span class="o">=</span> <span class="p">[</span><span class="n">startPoint</span> <span class="nl">bearingTo:</span><span class="n">endPoint</span><span class="p">];</span>
+</span><span class='line'><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Bearing: %f&quot;</span><span class="p">,</span> <span class="n">bearing</span><span class="p">);</span> <span class="c1">// bearing is 180</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Both of these calculations use the formulas provided on the page <a href="http://www.movable-type.co.uk/scripts/latlong.html">Calculate distance, bearing and more between Latitude/Longitude points</a>.  This page has lots of information on the formulas and provides them in mathematical notation as well as examples translated to Javascript.</p>
+
+<p>My Objective-C category incorporating these calculations is available from <a href="https://github.com/scarpenter/LocationExtensions">my Github account</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-02-20T16:51:00-05:00" pubdate data-updated="true">Feb 20<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2013/01/26/scraping-web-pages-with-ruby/" title="Previous Post: Scraping Web Pages with Ruby">&laquo; Scraping Web Pages with Ruby</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/03/03/the-importance-of-app-store-discoverability/" title="Next Post: The Importance of App Store Discoverability">The Importance of App Store Discoverability &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

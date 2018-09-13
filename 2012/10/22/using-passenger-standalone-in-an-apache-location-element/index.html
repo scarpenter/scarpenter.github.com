@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Passenger Standalone in an Apache Location Element - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="Using Passenger Standalone and RVM you can run web apps using multiple versions of Ruby on a single server. Phusion has a blog post with fairly &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/10/22/using-passenger-standalone-in-an-apache-location-element/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Passenger Standalone in an Apache Location Element</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-22T08:39:00-04:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Using <a href="http://www.modrails.com/documentation/Users%20guide%20Standalone.html">Passenger Standalone</a> and <a href="https://rvm.io">RVM</a> you can run web apps using multiple versions of Ruby on a single server. Phusion has a <a href="http://blog.phusion.nl/2010/09/21/phusion-passenger-running-multiple-ruby-versions/">blog post</a> with fairly detailed instructions on getting this set up.</p>
+
+<p>One assumption in that post is that each web app will be running as its own site (using the ServerName directive inside an Apache <a href="http://httpd.apache.org/docs/2.2/mod/core.html#virtualhost">&lt;VirtualHost&gt;</a> element). In my case, I wanted to run each web app as a virtual directory in a single VirtualHost. My original configuration (with everything running the same Ruby version) looked like this:</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='aconf'><span class='line'><span class="nt">&lt;VirtualHost</span> <span class="s">*:80</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c"># Other configuration directives...</span>
+</span><span class='line'>    <span class="nb">RackBaseURI</span> <span class="sx">/app1</span>
+</span><span class='line'>    <span class="nb">RackBaseURI</span> <span class="sx">/app2</span>
+</span><span class='line'>    <span class="nb">RackBaseURI</span> <span class="sx">/app3</span>
+</span><span class='line'><span class="nt">&lt;/VirtualHost&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This server is using (regular) Passenger to serve 3 Rack apps (in this case <a href="http://www.sinatrarb.com">Sinatra</a>) at the urls /app1, /app2, and /app3. Now I want to run app1 under a different Ruby version. Following the instructions in Phusion&#8217;s post, I installed Ruby 1.9.3 using RVM and then installed Passenger (note: the <code>--pre</code> flag isn&#8217;t necessary for installing Passenger anymore since the current release version includes the Standalone server).</p>
+
+<p>The next step is to switch app1 to Ruby 1.9.3 while leaving app2 and app3 alone:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='aconf'><span class='line'><span class="nt">&lt;VirtualHost</span> <span class="s">*:80</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="c"># Other configuration directives...</span>
+</span><span class='line'>    <span class="nb">RackBaseURI</span> <span class="sx">/app2</span>
+</span><span class='line'>    <span class="nb">RackBaseURI</span> <span class="sx">/app3</span>
+</span><span class='line'>    <span class="nt">&lt;Location</span> <span class="s">/app1</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="nb">PassengerEnabled</span> <span class="k">off</span>
+</span><span class='line'>        <span class="nb">ProxyPass</span> http://127.0.0.1:3000/
+</span><span class='line'>        <span class="nb">ProxyPassReverse</span> http://127.0.0.1:3000/
+</span><span class='line'>    <span class="nt">&lt;/Location&gt;</span>
+</span><span class='line'><span class="nt">&lt;/VirtualHost&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are only a few changes here. First, app1 has its <code>RackBaseURI</code> directive removed. Secondly, a <code>&lt;Location&gt;</code> element was added for the <code>/app1</code> virtual directory. On line 6 the <code>PassengerEnabled</code> directive turns off the &#8220;main&#8221; Passenger processing for this virtual directory. Then the <code>ProxyPass</code> and <code>ProxyPassReverse</code> directives are added to handle the proxying to Passenger Standalone.</p>
+
+<p>With only those few changes, app1 is now running on Ruby 1.9.3 while app2 and app3 continue to run as they did before. If the need arises later to run another version of Ruby it&#8217;s just a matter of installing it with RVM, setting up a new instance of Passenger Standalone, and adding another <code>&lt;Location&gt;</code> element.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-22T08:39:00-04:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/10/15/scrolling-a-uitableview-when-displaying-the-keyboard/" title="Previous Post: Scrolling a UITableView when displaying the keyboard">&laquo; Scrolling a UITableView when displaying the keyboard</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/10/27/easy-score-keeper-released/" title="Next Post: Easy Score Keeper released">Easy Score Keeper released &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

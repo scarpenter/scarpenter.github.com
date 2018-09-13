@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails SSL Route Generation with nginx and Unicorn - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="I recently enabled SSL for a Rails 3 site that I&#8217;m working on. I thought it would be simple since the entire site will be served over SSL (no &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2013/09/02/rails-ssl-route-generation-with-nginx-and-unicorn/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rails SSL Route Generation With Nginx and Unicorn</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-02T19:26:00-04:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I recently enabled SSL for a Rails 3 site that I&#8217;m working on.  I thought it would be simple since the entire site will be served over SSL (no switching between SSL and non-SSL requests based on the page).</p>
+
+<!-- more -->
+
+
+<p>Since the entire site will be served over SSL, I configured nginx to do the SSL redirects for me:</p>
+
+<figure class='code'><figcaption><span>nginx.conf  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">server</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kn">listen</span>      <span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">server_name</span> <span class="s">localhost</span> <span class="s">test.something.com</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">return</span> <span class="mi">301</span> <span class="s">https://test.something.com</span><span class="nv">$request_uri</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now whenever a non-SSL request comes in, nginx will redirect to the same path using SSL.  My SSL server configuration is:</p>
+
+<figure class='code'><figcaption><span>nginx.conf  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">server</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kn">listen</span>      <span class="mi">443</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">ssl</span>         <span class="no">on</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">ssl_certificate</span>     <span class="s">/path/to/crt.crt</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">ssl_certificate_key</span> <span class="s">/path/to/private.key</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">root</span>        <span class="s">/var/www/something/current/public</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">index</span>       <span class="s">index.html</span> <span class="s">index.htm</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">server_name</span> <span class="s">localhost</span> <span class="s">test.something.com</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">try_files</span>   <span class="nv">$uri/index.html</span> <span class="nv">$uri.html</span> <span class="nv">$uri</span> <span class="s">@app</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kn">location</span> <span class="s">@app</span> <span class="p">{</span>
+</span><span class='line'>      <span class="kn">proxy_set_header</span>    <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>      <span class="kn">proxy_set_header</span>    <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+</span><span class='line'>      <span class="kn">proxy_redirect</span>      <span class="no">off</span><span class="p">;</span>
+</span><span class='line'>      <span class="kn">proxy_pass</span>          <span class="s">http://unicorn_something_server</span><span class="p">;</span> <span class="c1"># proxy to a Unicorn upstream configured earlier in the file</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is just the same configuration I previously had (before adding SSL) with the <code>listen</code> directive changed to <code>443</code> and the <code>ssl</code> directives added.</p>
+
+<p>After making these changes and restarting nginx, everything seemed to be working correctly.  Any requests to the non-SSL site were redirected with a <code>301</code> response code as expected.</p>
+
+<p>After a day or so I noticed that URLs being generated by Rails were not using the https scheme.  I originally noticed it with named routes like so:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># In routes.rb</span>
+</span><span class='line'><span class="n">get</span> <span class="s2">&quot;dashboard&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;dashboard#index&quot;</span><span class="p">,</span> <span class="n">as</span><span class="p">:</span> <span class="s2">&quot;dashboard&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># In a controller</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">create</span>
+</span><span class='line'>  <span class="c1"># create something</span>
+</span><span class='line'>  <span class="n">redirect_to</span> <span class="n">dashboard_url</span><span class="p">,</span> <span class="n">alert</span><span class="p">:</span> <span class="s2">&quot;Creation successful&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># The generated route from redirect_to would be &quot;http://test.something.com/dashboard&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Anywhere Rails was generating a full URL, the non-SSL version was being generated.  It took me a bit to notice this since in most places I was using the <code>_path</code> version of the named routes which generates just a relative path.  So on a page that was served over SSL, those relative paths of course led to SSL pages.  I should note that the site continued to &#8220;work&#8221; since the generated non-SSL URL was then redirected to the SSL version by nginx, but I definitely did not want to continue to generate extra requests (it also caused a problem with some URLs when accessed via <a href="http://jquerymobile.com">jQuery Mobile</a>).</p>
+
+<p>It took quite a lot of searching to finally find the answer; most of the things written about Rails and SSL are in relation to either 1) having Rails do the SSL redirection using something like <code>config.force_ssl = true</code> or 2) managing a site with some pages served over SSL and some not.  The few references I found mentioned Rails using whatever scheme was in use by the current page when generating URLs (which intuitively made sense to me since it got the host name correct).</p>
+
+<p>I finally ended up debugging in to the Rails source to see how it makes the decision on what scheme to use when generating URLs.  After a few layers, it comes down to this code in Rack:</p>
+
+<figure class='code'><figcaption><span>request.rb </span><a href='https://github.com/rack/rack/blob/rack-1.4/lib/rack/request.rb#L70-86'>source </a></figcaption> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">scheme</span>
+</span><span class='line'>  <span class="k">if</span> <span class="vi">@env</span><span class="o">[</span><span class="s1">&#39;HTTPS&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span>
+</span><span class='line'>    <span class="s1">&#39;https&#39;</span>
+</span><span class='line'>  <span class="k">elsif</span> <span class="vi">@env</span><span class="o">[</span><span class="s1">&#39;HTTP_X_FORWARDED_SSL&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="s1">&#39;on&#39;</span>
+</span><span class='line'>    <span class="s1">&#39;https&#39;</span>
+</span><span class='line'>  <span class="k">elsif</span> <span class="vi">@env</span><span class="o">[</span><span class="s1">&#39;HTTP_X_FORWARDED_SCHEME&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="vi">@env</span><span class="o">[</span><span class="s1">&#39;HTTP_X_FORWARDED_SCHEME&#39;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">elsif</span> <span class="vi">@env</span><span class="o">[</span><span class="s1">&#39;HTTP_X_FORWARDED_PROTO&#39;</span><span class="o">]</span>
+</span><span class='line'>    <span class="vi">@env</span><span class="o">[</span><span class="s1">&#39;HTTP_X_FORWARDED_PROTO&#39;</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="vi">@env</span><span class="o">[</span><span class="s2">&quot;rack.url_scheme&quot;</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">ssl?</span>
+</span><span class='line'>  <span class="n">scheme</span> <span class="o">==</span> <span class="s1">&#39;https&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rails uses the <code>ssl?</code> method to determine what scheme to use in generated URLs.  When I debugged my site running under SSL, none of the env variables were set, causing Rails to treat the request as if it came in over regular http.</p>
+
+<p>The solution turns out to be simple (as they often are when you can track down the root cause).  Add an extra header in the <code>location</code> configuration in nginx:</p>
+
+<figure class='code'><figcaption><span>nginx.conf  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='nginx'><span class='line'><span class="k">location</span> <span class="s">@app</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kn">proxy_set_header</span>    <span class="s">X-Forwarded-For</span> <span class="nv">$proxy_add_x_forwarded_for</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">proxy_set_header</span>    <span class="s">X-Forwarded-Proto</span> <span class="s">https</span><span class="p">;</span> <span class="c1"># New header for SSL</span>
+</span><span class='line'>  <span class="kn">proxy_set_header</span>    <span class="s">Host</span> <span class="nv">$http_host</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">proxy_redirect</span>      <span class="no">off</span><span class="p">;</span>
+</span><span class='line'>  <span class="kn">proxy_pass</span>          <span class="s">http://unicorn_something_server</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After adding that single line and restarting nginx, Rails is generating URLs using https instead of http.  In hindsight, it makes sense that Rails was not seeing the right scheme since the SSL is being terminated at nginx, but it never occurred to me that that&#8217;s what might be happening.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-02T19:26:00-04:00" pubdate data-updated="true">Sep 2<span>nd</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2013/06/13/transferring-an-ios-app/" title="Previous Post: Transferring an iOS App">&laquo; Transferring an iOS App</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/10/20/cposc-2013-presentation-notes/" title="Next Post: CPOSC 2013 Presentation Notes">CPOSC 2013 Presentation Notes &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

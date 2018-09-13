@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>An easy macro for checking iPhone vs. iPad - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="When working on a universal iOS app, I occasionally have the need to check what type of device the app is currently running on. This is pretty simple &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/10/02/an-easy-macro-for-checking-iphone-vs-ipad/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">An Easy Macro for Checking iPhone vs. iPad</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-02T17:07:00-04:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>When working on a universal iOS app, I occasionally have the need to check what type of device the app is currently running on. This is pretty simple
+to do using the <code>currentDevice</code> static method of the
+<a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/UIDevice_Class/Reference/UIDevice.html">UIDevice</a> class. This gives
+you a UIDevice instance from which you can check the <code>userInterfaceIdiom</code> property. If you only need to check in one or two places this is sufficient:</p>
+
+<!-- more -->
+
+
+
+
+<div><script src='https://gist.github.com/3823381.js?file=basiccheck.m'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>But once you start repeating that code in more places, it feels like a lot of work to get right. So instead I created a simple macro named <code>IsPhone</code>
+to encapsulate the check:</p>
+
+<div><script src='https://gist.github.com/3823381.js?file=Project-Prefix.pch'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>Now I can just use the macro in my code instead of repeating the full check:</p>
+
+<div><script src='https://gist.github.com/3823381.js?file=using_macro.m'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>In general I try to avoid using this macro at all though. In most cases I have separate view controllers for the iPhone and iPad versions of a screen
+so this logic is unnecessary. Where I find it useful is in shared controllers (primarily settings-type screens that are shown as popovers on the iPad).
+This allows me to take different actions on popover dismissal as well as return different responses to <code>shouldAutorotateToInterfaceOrientation</code> depending
+on the current device.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-02T17:07:00-04:00" pubdate data-updated="true">Oct 2<span>nd</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2010/11/26/gmail-logging-with-log4j-1-1-16/" title="Previous Post: Gmail logging with log4j 1.2.16">&laquo; Gmail logging with log4j 1.2.16</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/10/07/uikeyboarddidshownotification-called-twice/" title="Next Post: UIKeyboardDidShowNotification called twice">UIKeyboardDidShowNotification called twice &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

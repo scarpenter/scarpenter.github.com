@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Page Specific Javascript With the Rails Asset Pipeline - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="Rails&#8217; asset pipeline is a great way to manage your javascript and CSS in a Rails app. By default it handles pre-processing your files ( &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/11/05/page-specific-javascript-with-the-asset-pipeline/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Page Specific Javascript With the Rails Asset Pipeline</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-05T16:37:00-05:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Rails&#8217; asset pipeline is a great way to manage your javascript and CSS in a Rails app.  By default it handles pre-processing your files (converting CoffeeScript to javascript and SASS to CSS), concatentating your files into a single file, and generating filenames including hashes of the content.  This reduces the number of HTTP requests necessary to download your files and makes it easy to use HTTP caching on your assets.</p>
+
+<!-- more -->
+
+
+<p>This works fine by default if you reference all of your javascript files from <code>application.js</code> which serves as a manifest of included files.  In the development environment the files are served individually and un-minified (which is useful for debugging) and in production they are concatenated and minified.  But what do you do if you want to have page (or section)-specific files?</p>
+
+<p>Your first approach might be to just add a new file to the <code>app/assets/javascripts/</code> folder in your project and then reference it from your page:</p>
+
+<div class="centered screenshots">
+    <img src="http://pictures.seancarpenter.net/blog/assets_first.png" title="assets directory" alt="assets directory">
+    <em>A separate CoffeeScript file</em>
+</div>
+
+
+
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;!--</span> <span class="no">Other</span> <span class="n">header</span><span class="o">-</span><span class="n">type</span> <span class="n">stuff</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="o">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s2">&quot;separated_code&quot;</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will work fine in development.  The file will be pre-processed and served separately like all the others and life will be good.  The problem is that this will fail in production if you&#8217;re precompiling your assets (which you should be).  The reason is that only <code>application.js</code> is considered as a manifest during precompilation.  So while <code>separated_code.js.coffee</code> exists in the assets directory it won&#8217;t be compiled and minified for production.</p>
+
+<p>You can add additional manifest files to the list considered during precompilation fairly simply by modifying <code>application.rb</code>.  You can modify the <code>precompile</code> property of the assets configuration like so:</p>
+
+<figure class='code'><figcaption><span>application.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">precompile</span> <span class="o">+=</span> <span class="sx">%w( separated.js )</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And add a new manifest file that <code>requires</code> the actual code:</p>
+
+<figure class='code'><figcaption><span>separated.js  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require separated_code</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This works but it&#8217;s pretty tedious to add every new file like this.  So instead, I decided to make it more generic.  I modified my <code>precompile</code> property like this:</p>
+
+<figure class='code'><figcaption><span>application.rb  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">config</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">precompile</span> <span class="o">+=</span> <span class="sx">%w( *-bundle.js )</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now I can add as many additional javascript manifest files as I need and include whatever individual files in those that I want to.  I&#8217;ve been using directories to organize the files that go in each bundle.  For example:</p>
+
+<div class="centered screenshots">
+    <img src="http://pictures.seancarpenter.net/blog/assets_grouped.png" title="assets directory" alt="assets directory">
+    <em>CoffeeScript files for a section</em>
+</div>
+
+
+
+
+<figure class='code'><figcaption><span>section1-bundle.js  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require_tree ./section1/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And in my actual page:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;!--</span> <span class="no">Other</span> <span class="n">header</span><span class="o">-</span><span class="n">type</span> <span class="n">stuff</span> <span class="o">--&gt;</span>
+</span><span class='line'><span class="o">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s2">&quot;section1-bundle&quot;</span> <span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>One additional step is to remove the <code>require_tree</code> directive from <code>application.js</code>.  Otherwise (since <code>require_tree</code> is recursive) the files in each bundle will also be included in the main application file which isn&#8217;t what you want.</p>
+
+<p>Now I&#8217;m free to organize my javascript files in whatever way makes sense but still get the advantages of the asset pipeline (precompliation/concatentation/minification).  I&#8217;ve done a similar thing with my CSS files (although I&#8217;ve found there&#8217;s less reason to separate my CSS as much as my javascript).</p>
+
+<p>I try to avoid putting anything that is shared into more than one of these bundles.  Placing the same file in more than one bundle will result in the contents of that file being downloaded more than once since it will be concatenated with the rest of the files in each bundle.  So I try to keep shared stuff required from <code>application.js</code>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-05T16:37:00-05:00" pubdate data-updated="true">Nov 5<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/10/27/easy-score-keeper-released/" title="Previous Post: Easy Score Keeper released">&laquo; Easy Score Keeper released</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/11/11/windows-phone-makes-it-hard-to-get-started/" title="Next Post: Windows Phone 8 Makes It Hard To Get Started">Windows Phone 8 Makes It Hard To Get Started &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

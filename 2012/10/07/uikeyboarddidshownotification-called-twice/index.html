@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>UIKeyboardDidShowNotification called twice - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="In one of my iOS apps, I&#8217;m listening for the UIKeyboardDidShowNotification to do some view resizing when the keyboard is shown (a more detailed &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/10/07/uikeyboarddidshownotification-called-twice/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">UIKeyboardDidShowNotification Called Twice</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-07T19:46:00-04:00" pubdate data-updated="true">Oct 7<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In one of my iOS apps, I&#8217;m listening for the <code>UIKeyboardDidShowNotification</code> to do some view resizing when the keyboard is shown (a more detailed post on doing this is coming). Recently I noticed that my selector was being called twice when the keyboard was shown on iOS 6.</p>
+
+<!-- more -->
+
+
+<h2>Tracking it down</h2>
+
+<p>What made this a bit difficult to track down is that it was only happening in one of my view controllers that listened for this notification. In the other, the selector was only being called once as expected. My first step was to do some logging to figure out what keyboard frame was arriving in each notification:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">keyboardShown:</span><span class="p">(</span><span class="n">NSNotification</span><span class="o">*</span><span class="p">)</span> <span class="n">notification</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">CGRect</span> <span class="n">keyboardFrame</span> <span class="o">=</span> <span class="p">[[[</span><span class="n">notification</span> <span class="n">userInfo</span><span class="p">]</span> <span class="nl">objectForKey:</span><span class="n">UIKeyboardFrameEndUserInfoKey</span><span class="p">]</span> <span class="n">CGRectValue</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">CGRect</span> <span class="n">converted</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">convertRect:</span><span class="n">keyboardFrame</span> <span class="nl">fromView:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Keyboard frame: %@&quot;</span><span class="p">,</span> <span class="n">NSStringFromCGRect</span><span class="p">(</span><span class="n">keyboardFrame</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first thing this logging made obvious was that it was indeed a different frame being delivered in each notification. While the width was the same, the keyboard frame was taller in the second notification than the first. When I compared the log data from the view controller where the notification was arriving twice to the one where it was only arriving once, I found that the keyboard frame height matched the first of the double notifications.</p>
+
+<h2>The cause</h2>
+
+<p>That height match was what finally caused the light bulb to go on for me. The <code>UITextField</code> that was triggering two notifications uses an <code>inputAccessoryView</code> to display a close button above the keyboard. The first notification that arrives contains the keyboard frame without the <code>inputAccessoryView</code> while the second includes the height of the accessory view. I&#8217;ve confirmed that this only happens on iOS 6 - on iOS 5 only a single notification is delivered that contains the keyboard frame including the accessory view.</p>
+
+<h2>The solution</h2>
+
+<p>That really depends on what you are doing in your selector. If you are just resizing your main view you may be fine receiving both notficiations - your view will just end up being resized twice. If not you may need to keep track of the two notifications so that you know which one you are responding to.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-07T19:46:00-04:00" pubdate data-updated="true">Oct 7<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/10/02/an-easy-macro-for-checking-iphone-vs-ipad/" title="Previous Post: An easy macro for checking iPhone vs. iPad">&laquo; An easy macro for checking iPhone vs. iPad</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/10/15/scrolling-a-uitableview-when-displaying-the-keyboard/" title="Next Post: Scrolling a UITableView when displaying the keyboard">Scrolling a UITableView when displaying the keyboard &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

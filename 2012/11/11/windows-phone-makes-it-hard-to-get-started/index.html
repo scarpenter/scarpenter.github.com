@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Windows Phone 8 Makes It Hard To Get Started - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="I decided to give Windows Phone 8 development a shot, enticed by their &#8220;$8 for 8 days&#8221; deal on developer program membership (it&#8217;s &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/11/11/windows-phone-makes-it-hard-to-get-started/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Windows Phone 8 Makes It Hard to Get Started</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-11T10:25:00-05:00" pubdate data-updated="true">Nov 11<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I decided to give Windows Phone 8 development a shot, enticed by their &#8220;$8 for 8 days&#8221; deal on developer program membership (it&#8217;s normally $99/year).  My idea is to try writing <a href="http://itunes.apple.com/us/app/easy-score-keeper/id570999111?ls=1&amp;mt=8&amp;partnerId=30&amp;siteID=GedyEx6hBKQ">Easy Score Keeper</a> for Windows Phone 8 since I just released it on iOS.  Since I&#8217;ve been a Microsoft developer for 12 years and a .Net developer for about 9 I&#8217;m not worried about coding in C#.</p>
+
+<p>But it turns out that getting started with development is harder than I expected.  First off, I&#8217;m using almost entirely Macs now (even my wife&#8217;s main computer is a MacBook Pro).  I thought I&#8217;d just use a <a href="http://www.parallels.com/products/desktop/">Parallels VM</a> (like I do in my day-to-day work).  Unfortunately, the Windows Phone 8 emulator is actually a Hyper-V virtual machine so that adds some constraints to a development setup:</p>
+
+<!-- more -->
+
+
+<ol>
+<li>Hyper-V support in Windows 8 is <a href="http://blogs.windows.com/windows/b/bloggingwindows/archive/2012/04/16/announcing-the-windows-8-editions.aspx">only available in the Pro edition</a> or higher, so a &#8220;plain&#8221; Windows 8 install already doesn&#8217;t support running the emulator.</li>
+<li>Your processor is required to support the relatively new <a href="http://en.wikipedia.org/wiki/Second_Level_Address_Translation">SLAT</a> capability.</li>
+</ol>
+
+
+<p>Since Parallels doesn&#8217;t pass through any processor virtualization support I won&#8217;t be able to do development in a VM (there are <a href="http://communities.vmware.com/message/2141330#2141330">reports</a> of it working in an unsupported way in VMWare Fusion).  My next idea was to use a Windows 7 computer I have around and install Windows 8 in a VHD (per <a href="http://www.hanselman.com/blog/GuideToInstallingAndBootingWindows8DeveloperPreviewOffAVHDVirtualHardDisk.aspx">Scott Hanselman&#8217;s guide</a>).  But the computer I was going to do that on has an Intel Core 2 Quad processor which doesn&#8217;t support SLAT, so that&#8217;s out.</p>
+
+<p>I guess I&#8217;ll end up installing Bootcamp on my newest Mac (which has an Intel Core i5) and doing the development there.  That&#8217;s suboptimal since then I&#8217;ll need to reboot to switch between Windows Phone development and doing anything else on my machine.</p>
+
+<p>This decision on the emulator seems odd considering that Windows Phone 8 is starting from behind in terms of developer adoption.  One way to get some apps in the store is to entice developers from other platforms to write for Windows Phone (either new apps or ports of existing ones).  But many developers (certainly iOS developers but I think most Android developers as well) are not running Windows natively on new hardware which makes the need for hardware supported virtualization cumbersome.  In addition, I know many Windows developers use VMs for development in order to manage separate environments, etc.  So this requirement is a problem for them as well.</p>
+
+<p>The emulator requirements are also a problem if Microsoft is attempting to lure hobbyist developers.  Making a <a href="http://www.microsoft.com/visualstudio/eng/products/visual-studio-express-for-windows-phone">Windows Phone 8 version</a> of Visual Studio Express free is a great way to get people interested (Visual Studio is a very full-featured IDE).  But the requirement for Windows 8 Pro means that basic machines being sold at retail stores won&#8217;t be able to develop Windows 8 Phone apps without an upgrade.  The SLAT requirement also means that only machines purchased in the last 2-3 years (since the release of the Core i3 and i5) are capable of running the emulator.</p>
+
+<p>Obviously iOS development has a high financial bar for entry since you need a Mac; this kind of requirement isn&#8217;t unprecented.  But Apple isn&#8217;t trying to kickstart a new platform at this point.  In addition, a 4 year old MacBook Pro is capable of doing development for iOS 6 so at least you don&#8217;t need to go out and buy a brand new Mac if you have one around.</p>
+
+<p>It&#8217;s probably too late at this point but it would be great if Microsoft could remove the Hyper-V requirement from the Windows Phone 8 emulator.  Making it as easy as possible to develop for their platform can only help in the long run.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-11T10:25:00-05:00" pubdate data-updated="true">Nov 11<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/11/05/page-specific-javascript-with-the-asset-pipeline/" title="Previous Post: Page Specific Javascript With the Rails Asset Pipeline">&laquo; Page Specific Javascript With the Rails Asset Pipeline</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/11/28/detecting-multiple-swipe-directions-with-uiswipegesturerecognizer/" title="Next Post: Detecting Multiple Swipe Directions with UISwipeGestureRecognizer">Detecting Multiple Swipe Directions with UISwipeGestureRecognizer &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

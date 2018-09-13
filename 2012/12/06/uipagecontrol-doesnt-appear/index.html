@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>UIPageControl Doesn't Appear - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="I had a little trouble with my first use of a UIPageControl. I added it to my view in a XIB file and set the &#8220;Tint Color&#8221; and &#8220; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/12/06/uipagecontrol-doesnt-appear/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">UIPageControl Doesn't Appear</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-06T18:37:00-05:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I had a little trouble with my first use of a <a href="http://developer.apple.com/library/ios/#documentation/UIKit/Reference/UIPageControl_Class/Reference/Reference.html">UIPageControl</a>.  I added it to my view in a XIB file and set the &#8220;Tint Color&#8221; and &#8220;Current Page&#8221; properties to dark colors.  Everything looked great in the XIB but when I ran the app, the pager wasn&#8217;t there.</p>
+
+<!-- more -->
+
+
+<p>A couple of Google searches led to a <a href="http://stackoverflow.com/a/9612497/729">few</a> <a href="http://stackoverflow.com/a/6016125/729">posts</a> mentioning the fact that the pager looks like it&#8217;s invisible when shown on a light background.  This is a consequence of the default colors being variations of white.  I dismissed this as being my issue since I had set the colors to be dark in the XIB and everything looked fine there.</p>
+
+<p>After much messing around with positioning, colors, etc. (everything I could think of) I went back to <a href="http://developer.apple.com/library/ios/#documentation/UIKit/Reference/UIPageControl_Class/Reference/Reference.html">Apple&#8217;s documentation</a>.  The <code>currentPageIndicatorTintColor</code> and <code>pageIndicatorTintColor</code> properties are only available in iOS 6.0 and above.  Since I was developing with the iOS 6 SDK, the properties were settable in the XIB.  But I was running the app on an iOS 5.1 device which didn&#8217;t have the properties, so the pager was in fact white.  I solved the problem by setting the pager colors back to the default in the XIB and displaying the pager on a dark background.</p>
+
+<p>Two lessons here: 1) When something doesn&#8217;t seem to be working, it never hurts to give the documentation another look, and 2) It&#8217;s important to test your app on whatever iOS/device versions you&#8217;ll actually be deploying to.  While this particular issue doesn&#8217;t result in a runtime crash, having the pager be invisible to anyone running iOS 5 would not have been a good outcome.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-06T18:37:00-05:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/11/28/detecting-multiple-swipe-directions-with-uiswipegesturerecognizer/" title="Previous Post: Detecting Multiple Swipe Directions with UISwipeGestureRecognizer">&laquo; Detecting Multiple Swipe Directions with UISwipeGestureRecognizer</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/12/15/getcustomattributes-and-overridden-properties/" title="Next Post: GetCustomAttributes() and Overridden Properties">GetCustomAttributes() and Overridden Properties &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

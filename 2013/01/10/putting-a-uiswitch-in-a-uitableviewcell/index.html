@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Putting a UISwitch in a UITableViewCell - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="Due to the ubiquitousness of using UITableViews to display various types of UIs in iOS, many different types of content end up inside &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2013/01/10/putting-a-uiswitch-in-a-uitableviewcell/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Putting a UISwitch in a UITableViewCell</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T17:43:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Due to the ubiquitousness    of using UITableViews to display various types of UIs in iOS, many different types of content end up inside UITableViewCells.  One common approach involves putting a <code>UISwitch</code> inside a table cell to represent an on/off setting:</p>
+
+<!-- more -->
+
+
+<div class="screenshots centered">
+    <img src="http://pictures.seancarpenter.net/blog/uiswitch_cell.png" title="UISwitch in a UITableViewCell" alt="UISwitch in a UITableViewCell">
+    <em>A UISwitch in a UITableViewCell</em>
+</div>
+
+
+<p>So how do you actually go about making this type of cell?  The method I&#8217;m going to describe here doesn&#8217;t require a custom UITableViewCell subclass so that makes it easy to use in just about any iOS project.</p>
+
+<h2>Configuring a cell to display a UISwitch</h2>
+
+<p>The first step is to configure your table cell to contain a <code>UISwitch</code> and a <code>UILabel</code> (for the description):</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span><span class="p">(</span><span class="n">UITableViewCell</span><span class="o">*</span><span class="p">)</span> <span class="nf">tableView:</span><span class="p">(</span><span class="n">UITableView</span><span class="o">*</span><span class="p">)</span> <span class="n">tableView</span> <span class="nl">cellForRowAtIndexPath:</span><span class="p">(</span><span class="n">NSIndexPath</span><span class="o">*</span><span class="p">)</span> <span class="n">indexPath</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">static</span> <span class="n">NSString</span><span class="o">*</span> <span class="n">cellIdentifier</span> <span class="o">=</span> <span class="s">@&quot;switchCell&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UITableViewCell</span><span class="o">*</span> <span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier:</span><span class="n">cellIdentifier</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">cell</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">cell</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UITableViewCell</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithStyle:</span><span class="n">UITableViewCellStyleDefault</span> <span class="nl">reuseIdentifier:</span><span class="n">cellIdentifier</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">UISwitch</span><span class="o">*</span> <span class="n">s</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UISwitch</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">CGSize</span> <span class="n">switchSize</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="nl">sizeThatFits:</span><span class="n">CGSizeZero</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">s</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">switchSize</span><span class="p">.</span><span class="n">width</span> <span class="o">-</span> <span class="mf">5.0f</span><span class="p">,</span>
+</span><span class='line'>                             <span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">switchSize</span><span class="p">.</span><span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0f</span><span class="p">,</span>
+</span><span class='line'>                             <span class="n">switchSize</span><span class="p">.</span><span class="n">width</span><span class="p">,</span>
+</span><span class='line'>                             <span class="n">switchSize</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">s</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="o">=</span> <span class="n">UIViewAutoresizingFlexibleLeftMargin</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">s</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">switchChanged:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventValueChanged</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span> <span class="nl">addSubview:</span><span class="n">s</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">UILabel</span><span class="o">*</span> <span class="n">l</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">l</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@&quot;Notifications&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">CGRect</span> <span class="n">labelFrame</span> <span class="o">=</span> <span class="n">CGRectInset</span><span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="mf">10.0f</span><span class="p">,</span> <span class="mf">8.0f</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">labelFrame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">cell</span><span class="p">.</span><span class="n">contentView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mf">2.0f</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">l</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nl">boldSystemFontOfSize:</span><span class="mf">17.0f</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">l</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">labelFrame</span><span class="p">;</span>
+</span><span class='line'>        <span class="n">l</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">cell</span><span class="p">.</span><span class="n">accessibilityLabel</span> <span class="o">=</span> <span class="s">&quot;Notifications&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span> <span class="nl">addSubview:</span><span class="n">l</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">((</span><span class="n">UISwitch</span><span class="o">*</span><span class="p">)[</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span> <span class="nl">viewWithTag:</span><span class="mi">100</span><span class="p">]).</span><span class="n">on</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span> <span class="c1">// &quot;value&quot; is whatever the switch should be set to</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This looks like a lot of code, but most of it is related to positioning the label and the switch in the table cell.</p>
+
+<p>First, the switch.  On line 7, we get the size needed to display the switch.  Then the switch&#8217;s frame can be calculated (lines 8 - 11).  The <code>x</code> position of the switch is calculated by subtracting the switch&#8217;s width (plus a little padding) from the cell&#8217;s <code>contentView</code> width.  This places the switch against the right-hand side of the cell (inset by the padding amount).  The <code>y</code> position of the switch is calculated to center the switch vertically in the cell.</p>
+
+<p>The label is a little simpler.  On line 19 <code>CGRectInset</code> is used to give us a <code>CGRect</code> with a horizontal padding of 10 and a vertical padding of 8.  Then the width of the label is shrunk on line 20 to be half the width of the cell.</p>
+
+<p>Once the cell is configured, we set the switch&#8217;s value (finding it via the tag assigned on line 13) and we&#8217;re off to the races.</p>
+
+<h2>Responding to the switch being switched</h2>
+
+<p>Now we have a cell that displays a label and a switch with the switch&#8217;s value set appropriately.  How do we handle the user tapping the switch?  On line 14 in the setup code above, we added an action to be called when the switch&#8217;s value is changed.  We need to implement that action method:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">switchChanged:</span><span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nv">sender</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UISwitch</span><span class="o">*</span> <span class="n">switcher</span> <span class="o">=</span> <span class="p">(</span><span class="n">UISwitch</span><span class="o">*</span><span class="p">)</span><span class="n">sender</span><span class="p">;</span>
+</span><span class='line'>    <span class="kt">BOOL</span> <span class="n">value</span> <span class="o">=</span> <span class="n">switcher</span><span class="p">.</span><span class="n">on</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">// Store the value and/or respond appropriately</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Rounding out the behavior</h2>
+
+<p>There&#8217;s one additional step we can take to improve the cell&#8217;s behavior.  Right now, if the user taps anywhere in the cell that isn&#8217;t the switch, nothing happens.  We should make it so that tapping the cell anywhere (the label, the padding, etc.) triggers the switch.  That can be handled in the table view&#8217;s delegate:</p>
+
+<figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objc'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">tableView:</span><span class="p">(</span><span class="n">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">didSelectRowAtIndexPath:</span><span class="p">(</span><span class="n">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">tableView</span> <span class="nl">deselectRowAtIndexPath:</span><span class="n">indexPath</span> <span class="nl">animated:</span><span class="n">NO</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">UITableViewCell</span><span class="o">*</span> <span class="n">cell</span> <span class="o">=</span> <span class="p">[</span><span class="n">tableView</span> <span class="nl">cellForRowAtIndexPath:</span><span class="n">indexPath</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">UISwitch</span><span class="o">*</span> <span class="n">switcher</span> <span class="o">=</span> <span class="p">(</span><span class="n">UISwitch</span><span class="o">*</span><span class="p">)[</span><span class="n">cell</span><span class="p">.</span><span class="n">contentView</span> <span class="nl">viewWithTag:</span><span class="mi">100</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">switcher</span> <span class="nl">setOn:</span><span class="o">!</span><span class="n">switcher</span><span class="p">.</span><span class="n">on</span> <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">switchChanged:</span><span class="n">switcher</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>First we get a reference to the cell that was tapped, then the switch in that cell.  Line 5 animates toggling of the switch&#8217;s value.  Then we call the same action method that was assigned to the switch to process the value.</p>
+
+<h2>Wrapping up</h2>
+
+<p>There are other ways to include a <code>UISwitch</code> in a <code>UITableViewCell</code>.  One method is to subclass <code>UITableViewCell</code> and implement similar logic to that shown here.  That method is useful for encapsulating the switch and label related code.  If you take that route, you will probably want to create a delegate for your new subclass to allow the consuming code to be notified of switch value changes.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-10T17:43:00-05:00" pubdate data-updated="true">Jan 10<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/12/15/getcustomattributes-and-overridden-properties/" title="Previous Post: GetCustomAttributes() and Overridden Properties">&laquo; GetCustomAttributes() and Overridden Properties</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/01/26/scraping-web-pages-with-ruby/" title="Next Post: Scraping Web Pages with Ruby">Scraping Web Pages with Ruby &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

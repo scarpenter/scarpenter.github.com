@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Scrolling a UITableView when displaying the keyboard - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="The problem I have a few apps that allow you to edit text in a table cell of a UITableView. One thing that can happen when doing that (especially on &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2012/10/15/scrolling-a-uitableview-when-displaying-the-keyboard/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scrolling a UITableView When Displaying the Keyboard</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T12:51:00-04:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>The problem</h2>
+
+<p>I have a few apps that allow you to edit text in a table cell of a <a href="http://developer.apple.com/library/ios/#documentation/uikit/reference/UITableView_Class/Reference/Reference.html">UITableView</a>. One thing that can happen when doing that (especially on the iPhone) is that when the keyboard is shown it can actually cover the text field being edited.</p>
+
+<!-- more -->
+
+
+
+
+<div class="centered screenshots">
+    <img src="http://pictures.seancarpenter.net/blog/initial_view.png" title="Initial screen" alt="Initial screen">
+    <em>The initial screen before starting to edit</em>
+    <img src="http://pictures.seancarpenter.net/blog/cell_covered.png" title="Edited cell covered by keyboard" alt="Edited cell covered by keyboard">
+    <em>Attempting to edit Player 2</em>
+</div>
+
+
+<p>Since that&#8217;s not very usable you need to scroll the edited cell into view when the keyboard is shown. My first attempt was to use the <code>scrollToRowAtIndexPath:atScrollPosition:animated:</code> method on <code>UITableView</code>. Unfortunately this is only part of the solution. While the table view will scroll the supplied row into view, it doesn&#8217;t take into account the fact that the keyboard is visible. In other words the table view scrolls the row into view according to the table view&#8217;s frame, ignoring the fact that the keyboard is covering part of this frame. So the row may still not be visible.</p>
+
+<p>The route I took is to change the table view&#8217;s frame when the keyboard is shown. Combining this with a call to <code>scrollToRowAtIndexPath:atScrollPosition:animated:</code> results in the desired row being displayed when editing begins.</p>
+
+<h2>Responding to the keyboard appearing</h2>
+
+<p>The first step is to be notified when the keyboard is shown or hidden. This is fairly straightforward to do by registering for the <code>UIKeyboardDidShowNotification</code>/<code>UIKeyboardDidHideNotification</code>.</p>
+
+<div><script src='https://gist.github.com/3866697.js?file=ViewController_RegisterNotifications.m'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>When the notification arrives it&#8217;s time to do the adjustment of the frame:</p>
+
+<div><script src='https://gist.github.com/3866697.js?file=ViewController_Keyboard.m'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>First I save the initial height of the view. This is a handy shortcut that makes it easier to restore the initial size when the keyboard is hidden. On line 4 we grab the keyboard frame from the notification. This frame hasn&#8217;t been adjusted for any transforms applied to the view (like rotation) so it needs to be converted to view coordinates (line 5). Now all that&#8217;s left is to adjust the height of the main view. I just make the height of the main view equal to the <code>y</code> origin of the keyboard frame - this makes the view &#8220;touch&#8221; the top of the keyboard.</p>
+
+<p>Restoring the view&#8217;s height when the keyboard is hidden is a straightforward affair. I just restore the view&#8217;s initial height to what it was before shrinking it (which is why saving it in <code>keyboardShown:</code> was useful). The only additional step here is animating the view size change. While not strictly necessary, this makes the transition look a little nicer on the device.</p>
+
+<h2>Finishing up</h2>
+
+<p>So now the table view&#8217;s frame is being adjusted when the keyboard is shown. The last step is to scroll the newly resized table view to make the selected row visible. This is accomplished in the <code>UITextFieldDelegate</code>&#8217;s <code>textFieldDidBeginEditing</code> method. The only thing to be aware of here is that the delegate will be called before the keyboard is actually shown. To deal with that we delay the scrolling using delayed performance:</p>
+
+<div><script src='https://gist.github.com/3866697.js?file=ViewController_Scroll.m'></script>
+<noscript><pre><code></code></pre></noscript></div>
+
+
+<p>On line 6 you&#8217;ll need the row and section to scroll to - these need to be tracked/figured out based on your needs (they are the same values you would need if you weren&#8217;t dealing with the view resizing).</p>
+
+<p>After implementing these changes, the selected row nicely scrolls into view when the keyboard is shown. Much better!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T12:51:00-04:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2012/10/07/uikeyboarddidshownotification-called-twice/" title="Previous Post: UIKeyboardDidShowNotification called twice">&laquo; UIKeyboardDidShowNotification called twice</a>
+      
+      
+        <a class="basic-alignment right" href="/2012/10/22/using-passenger-standalone-in-an-apache-location-element/" title="Next Post: Using Passenger Standalone in an Apache Location Element">Using Passenger Standalone in an Apache Location Element &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

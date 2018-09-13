@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Transferring an iOS App - Sean Carpenter</title>
+  <meta name="author" content="Sean Carpenter">
+
+  
+  <meta name="description" content="Apple recently gave developers the ability to transfer ownership of apps in the App Store. While this certainly helps people who are selling their &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="https://blog.seancarpenter.net/2013/06/13/transferring-an-ios-app/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Sean Carpenter" type="application/atom+xml">
+  <meta name="msvalidate.01" content="2DF57F3ACCC667335B1C38AB138FA855" />
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="https://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12873243-1']);
+    _gaq.push(['_setDomainName', 'seancarpenter.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sean Carpenter</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.seancarpenter.net" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/about">About</a></li>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Transferring an iOS App</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T09:36:00-04:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Apple recently gave developers the ability to transfer ownership of apps in the App Store.  While this certainly helps people who are selling their app to another developer, it&#8217;s immediately useful to me to solve a problem I&#8217;ve had for about a year now.</p>
+
+<!-- more -->
+
+
+<p>When I developed my first iOS application (<a href="http://itunes.apple.com/us/app/easy-pitch-counter/id463372172?ls=1&amp;mt=8&amp;partnerId=30&amp;siteID=GedyEx6hBKQ">Easy Pitch Counter</a>) I signed up for an individual iOS developer account.  Later when my wife and I started <a href="http://www.cleverarmadillo.com">our company</a>, I signed up for a company/organization iOS developer account so that we could keep company-related revenue/paperwork/etc. separate.</p>
+
+<p>At the time, Apple didn&#8217;t allow you to transfer apps between developers, so I was stuck leaving my original two apps under my personal account while new apps went under the company account.  Now that transfer is enabled, I moved all of my apps to the company account.  The process is quite straightforward.</p>
+
+<h2>Starting a Transfer</h2>
+
+<p>The first step is to log in to <a href="https://itunesconnect.apple.com">iTunes Connect</a> using the account that currently houses the application to be transferred.  Head to the app details page and click the &#8220;Transfer App&#8221; button.  This brings you to a summary page that lists all of the requirements to enable app transfer as well as whether or not the current app meets them.</p>
+
+<div class="centered screenshots">
+    <img src="http://pictures.seancarpenter.net/blog/transfer_criteria.png" title="Criteria" alt="Criteria">
+</div>
+
+
+<p>The next thing you need is the information for the developer you&#8217;ll be transferring the app to.  The recipient&#8217;s Apple ID is the easy part, but you&#8217;ll also need the recipient&#8217;s team ID.  You can get this value by logging into the <a href="https://developer.apple.com/ios">iOS Dev Center</a> using the account that will receive the transferred application.  Then proceed to the <a href="https://developer.apple.com/membercenter/index.action">Member Center</a> and click the organization name near the top of the page.  This will display the account&#8217;s profile, where you can find the necessary team ID.</p>
+
+<div class="centered screenshots">
+    <img src="http://pictures.seancarpenter.net/blog/transfer_team_id.png" title="Team ID" alt="Team ID">
+</div>
+
+
+<p>After entering the recipient information, you&#8217;re presented with a transfer agreement that you must agree to.  Once you agree, the work is done for the account initiating the transfer.  The app detail page for this app will now display a banner indicating that a transfer has been initiated:</p>
+
+<div class="centered screenshots">
+    <img src="http://pictures.seancarpenter.net/blog/transfer_initiated.png" title="Transfer Initiated" alt="Transfer Initiated">
+</div>
+
+
+<h2>Accepting the Transfer</h2>
+
+<p>The next steps relate to accepting the inbound transfer using the destination account in iTunes Connect.  Once you log in using the destination account, head to the &#8220;Contracts, Tax, and Banking&#8221; section to view any inbound transfers.</p>
+
+<p>Select the pending transfer to see the incoming transfer agreement.  You&#8217;re also presented with the opportunity to update some of the app&#8217;s metadata (the items I saw were the support and marketing URLs and the app review contact info).  After filling in the metadata and accepting the agreement the actual transfer process is started.</p>
+
+<p>Apple says it may take up to 3 hours for the transfer to complete (or up to 2 days in some cases) but both apps I transferred were completed in a matter of minutes.</p>
+
+<p>This new ability to transfer apps may not seem like a big deal if you&#8217;re not selling any of your apps but having one active iOS developer account simplifies things for me.  In addition to the financial/paperwork aspect, having only one set of certificates/provisioning profiles/etc. is a big win for me.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn"><a rel="author" href="/about/">Sean Carpenter</a></span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T09:36:00-04:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/2013/05/24/using-haml-from-the-command-line/" title="Previous Post: Using Haml from the Command Line">&laquo; Using Haml from the Command Line</a>
+      
+      
+        <a class="basic-alignment right" href="/2013/09/02/rails-ssl-route-generation-with-nginx-and-unicorn/" title="Next Post: Rails SSL Route Generation with nginx and Unicorn">Rails SSL Route Generation with nginx and Unicorn &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2015/12/21/ro-to-sleep-a-new-roku-sleep-timer/">Ro To Sleep - A New Roku Sleep Timer</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2014/07/15/ios-push-notifications-with-amazon-sns/">iOS Push Notifications with Amazon SNS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/12/18/romote-now-with-a-sleep-timer/">Romote: Now with a Sleep Timer</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Sean Carpenter -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
